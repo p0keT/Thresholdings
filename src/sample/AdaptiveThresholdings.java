@@ -7,22 +7,19 @@ public class AdaptiveThresholdings {
 
     /**
      * Adaptive algorithm for 1 dimension imageRGB array
-     * ПРАЦЮЄ. Десь скоріш за все є помилка з х у. Тому є ота полоска.
-     * @param src Вхідне зображення. Одномірний масив.
-     * @param res Вихідне зображення. Одномірний масив.
-     * @param width і так понятно
-     * @param height і так понятно
+     * ПРАЦЮЄ. Десь скоріш за все є помилка з х у. полоски вже нема але мені здається цей метод мене десь обманює
+     * @param sourceImage Вхідне зображення. Одномірний масив.
+     * @param threshold threshold for binarization (most often values are 0.7 - 0.8)
+     * @param height  height of image (number of rows)
+     * @param width width of image (number of columns)
+     * @return binarization image array (1 dimension)
      */
-    public static void Bradley_threshold(int[] src, int[] res, int width, int height) {
-        final int S = width/4;
-
-        int s2 = 4;
-        final float t = 0.15f;
+    public static int[] Bradley_threshold(int[] sourceImage, int width, int height, float threshold) {
+        int[] src = sourceImage;
+        int[] res = new int[src.length];
         int []integral_image;
         int sum;
-        int count;
         int index;
-        int x1, y1, x2, y2;
 
         //рассчитываем интегральное изображение
         integral_image = new int[width*height];
@@ -38,20 +35,13 @@ public class AdaptiveThresholdings {
                     integral_image[index] = integral_image[index-1] + sum;
             }
         }
-        int temp=0;
-       /* for (int i = 0; i <integral_image.length ; i++) {
-            if(temp==16) {
-                temp = 0;
-                System.out.println();
-            }
-            temp++;
-            System.out.print(integral_image[i]+"/");
-        }*/
 
         //находим границы для локальных областей
         for (int i = 0; i < width; i++) {
-            //System.out.println();
-            for (int j = 0; j < height; j++) {
+
+            for (int j = 0; j < width; j++) {//тут замість height поставив width і полоска прибралася.
+                                                // Тра розібратися шо за херня і чо тепер все ок
+                                                //походу тут тра в циклах висоту і ширину поміняти і переробити алгоритм під ці зміни
                 index = width*j + i;
 
                 int a = (i - 2) * width + (j - 2);
@@ -119,12 +109,7 @@ public class AdaptiveThresholdings {
                 if(sD==0)
                     pixels-=1;
 
-                //System.out.print("[" +src[index]+"/"+ sum/pixels+"]");
-                /*if ((src[index]) < (sum / pixels))
-                    res[index] = 0;
-                else
-                    res[index] = 255;*/
-                if ( (src[index])<sum / pixels*0.7){
+                if ( (src[index])<sum / pixels*threshold){
                     res[index] = 0x000000;
                 }
                 else{
@@ -133,17 +118,7 @@ public class AdaptiveThresholdings {
             }
 
         }
-        // System.out.println();
-        int temp2=0;
-        /*for (int i = 0; i <res.length ; i++) {
-            if(temp2==16) {
-                temp2 = 0;
-                System.out.println();
-            }
-            temp2++;
-            System.out.print(res[i]+"/");
-        }*/
 
-
+        return res;
     }
 }
