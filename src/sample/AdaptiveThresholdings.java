@@ -26,7 +26,7 @@ public class AdaptiveThresholdings {
 
         //рассчитываем интегральное изображение
         integral_image = new int[width*height];
-
+        //TODO: прибрати повторення коду. Використати метод toIntegralImage()
         for (int i = 0; i < width; i++) {
             sum = 0;
             for (int j = 0; j < height; j++) {
