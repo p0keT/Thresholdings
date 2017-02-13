@@ -22,19 +22,7 @@ public class AdaptiveThresholdings {
         int index;
 
         //рассчитываем интегральное изображение
-        integral_image = new int[width*height];
-        //TODO: прибрати повторення коду. Використати метод toIntegralImage()
-        for (int i = 0; i < width; i++) {
-            sum = 0;
-            for (int j = 0; j < height; j++) {
-                index = j * width + i;
-                sum += src[index];
-                if (i==0)
-                    integral_image[index] = sum;
-                else
-                    integral_image[index] = integral_image[index-1] + sum;
-            }
-        }
+        integral_image = (new ImageProcessing().toIntegralImage(src,height,width));
 
         //находим границы для локальных областей
         for (int i = 0; i < width; i++) {

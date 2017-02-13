@@ -7,49 +7,24 @@ import java.awt.image.BufferedImage;
  */
 public class ImageProcessing {
 
-    //TODO: на даний момент не працює. написати перетворення в інтегральне зображення двумірного масиву
-    public int[][] toIntegralImage(int[][] arr){
-        int width = arr.length;
-        int height = arr[0].length;
-        int[] src = new int[arr.length*arr[0].length];
+    public int[][] toIntegralImage(int[][] srcArr){
 
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j <arr[i].length ; j++) {
-                src[arr[0].length*i+j]=arr[i][j];
-            }
-        }
-
-        final int S = width/4;
-
-        int s2 = 4;
-        final float t = 0.15f;
-        int []integral_image;
+        int [][]integral_image;
         int sum;
-        int count;
-        int index;
-        int x1, y1, x2, y2;
 
-        //рассчитываем интегральное изображение
-        integral_image = new int[width*height];//*sizeof(unsigned long*);
+        integral_image = new int[srcArr.length][srcArr[0].length];
 
-        for (int i = 0; i < width; i++) {
+        for (int i = 0; i < srcArr.length; i++) {
             sum = 0;
-            for (int j = 0; j < height; j++) {
-                index = j * width + i;
-                sum += src[index];
+            for (int j = 0; j < srcArr[0].length; j++) {
+                sum += srcArr[i][j];
                 if (i==0)
-                    integral_image[index] = sum;
+                    integral_image[i][j] = sum;
                 else
-                    integral_image[index] = integral_image[index-1] + sum;
+                    integral_image[i][j] = integral_image[i-1][j] + sum;
             }
         }
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j <arr[0].length ; j++) {
-                arr[i][j] = integral_image[arr[0].length*i+j];
-            }
-        }
-
-        return arr;
+        return integral_image;
     }
 
     /**
