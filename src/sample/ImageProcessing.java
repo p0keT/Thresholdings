@@ -127,6 +127,11 @@ public class ImageProcessing {
             for (int j=0; j < image.getHeight(); j++)
             {
                 rgbArray[i][j] = image.getRGB(i,j);
+                //Color color = new Color(image.getRGB(i, j));
+                //rgbArray[i][j] = color.getBlue();
+               // if(color.getRed()>20)
+                //System.out.println("++++++++||| "+color.getRed());
+
             }
         return rgbArray;
     }
@@ -147,5 +152,58 @@ public class ImageProcessing {
             for (int j = 0; j < height; j++)
                 image.setRGB(i,j,rgbArray[i][j]);
         return image;
+    }
+
+    /**
+     * Method makes image smaller
+     * @param rate coeficient to make the image larger
+     * @param imageRGB rgb array image to convert
+     * @return result rgb image array
+     */
+    public int[][] scaleSmaller(int rate,int [][] imageRGB){
+        int width = imageRGB.length;
+        int height = imageRGB[0].length;
+        int[][] scaleResult = new int[width/rate][height/rate];
+        for (int i = 0; i < width; i+=rate) {
+            for (int j = 0; j < height; j+=rate) {
+                int average = 0;
+                for (int k = i; (k < i+rate) && (k<width); k++) {
+                    for (int l = j; (l < j+rate) && (l<height); l++) {
+                        average += (imageRGB[k][l] & 0xFF);
+                    }
+                }
+                average = average/(rate*rate);
+                if ((i/rate < scaleResult.length) && (j/rate < scaleResult[0].length))
+                    scaleResult[i/rate][j/rate] = average<<0 | average<<8 | average << 16;
+            }
+        }
+        imageRGB = scaleResult;
+        return imageRGB;
+    }
+
+    /**
+     * Method makes image larger
+     * @param rate coeficient to make the image larger
+     * @param imageRGB rgb array image to convert
+     * @return result rgb image array
+     */
+    public int[][] scaleLarger(int rate,int [][] imageRGB){
+        int width = imageRGB.length;
+        int height = imageRGB[0].length;
+        int[][] scaleResult = new int[width*rate][height*rate];
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                int pixel = imageRGB[i][j]&0xFF;
+
+                for (int k = 0; ( (k < rate) && ( i*rate+k+1 < scaleResult.length) ) ; k++) {
+                    for (int l = 0; ( (l < rate) && ( j*rate+l+1 < scaleResult[0].length) ) ; l++) {
+                        scaleResult[i*rate+k+1][j*rate+l+1] = pixel<<0 | pixel<<8 | pixel<<16;
+                    }
+                }
+            }
+        }
+        imageRGB = scaleResult;
+        return imageRGB;
     }
 }
